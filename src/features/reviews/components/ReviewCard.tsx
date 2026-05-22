@@ -1,6 +1,7 @@
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/cn";
+import { GenerateButton } from "@/features/ai/components/GenerateButton";
 import type { Review } from "@/types";
 
 interface ReviewCardProps {
@@ -42,7 +43,10 @@ export function ReviewCard({ review }: ReviewCardProps) {
         <p className="text-sm text-muted-foreground leading-relaxed">
           {review.review_text}
         </p>
-        <span className="text-xs text-muted-foreground">{date}</span>
+        <div className="flex items-center justify-between">
+          <span className="text-xs text-muted-foreground">{date}</span>
+          <GenerateButton reviewId={review.id} />
+        </div>
       </CardContent>
     </Card>
   );
