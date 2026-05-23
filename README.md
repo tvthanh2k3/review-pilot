@@ -2,7 +2,7 @@
 
 Fetch Google reviews by Place ID → generate AI reply drafts (3 tones) → approve in one click.
 
-**Live demo:** [review-pilot.vercel.app](https://review-pilot.vercel.app)
+**Live demo:** [review-pilot-six.vercel.app](https://review-pilot-six.vercel.app)
 
 ---
 
@@ -12,7 +12,7 @@ Fetch Google reviews by Place ID → generate AI reply drafts (3 tones) → appr
 |---|---|
 | Framework | Next.js 16 (App Router) + TypeScript |
 | Database | Supabase (PostgreSQL) |
-| AI | OpenAI GPT-4o-mini |
+| AI | Google Gemini 2.0 Flash |
 | UI | Tailwind CSS 4 + shadcn/ui |
 | Validation | Zod |
 
@@ -24,7 +24,7 @@ flowchart LR
     UI -->|POST /api/ai/generate| API
     UI -->|Server Action| API
     API --> Google[Google Places API]
-    API --> OpenAI[OpenAI API]
+    API --> Gemini[Gemini API]
     API --> DB[(Supabase)]
 ```
 
@@ -55,7 +55,7 @@ See `.env.example` for the full list. Required:
 
 - `NEXT_PUBLIC_SUPABASE_URL` / `NEXT_PUBLIC_SUPABASE_ANON_KEY` — Supabase project API
 - `SUPABASE_SERVICE_ROLE_KEY` — server-only
-- `OPENAI_API_KEY` — server-only
+- `GEMINI_API_KEY` — server-only
 - `GOOGLE_PLACES_API_KEY` — requires **Places API (New)** enabled in Google Cloud Console
 
 ---
