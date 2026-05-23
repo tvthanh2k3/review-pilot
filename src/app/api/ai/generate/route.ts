@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getGeminiClient } from "@/lib/gemini";
+import { getGroqClient } from "@/lib/groq";
 import { createClient } from "@/lib/supabase/server";
 import { aiRepliesSchema, buildPrompt } from "@/features/ai/queries/aiSchema";
 import type { Tone } from "@/types";
@@ -29,14 +29,15 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     const prompt = buildPrompt(review.review_text, review.author_name, review.rating);
 
     let raw: string | null = null;
-    const model = getGeminiClient().getGenerativeModel({
-      model: "gemini-2.0-flash",
-      generationConfig: { responseMimeType: "application/json", maxOutputTokens: 600 },
-    });
 
     for (let attempt = 0; attempt < 2; attempt++) {
-      const result = await model.generateContent(prompt);
-      raw = result.response.text() || null;
+      const completion = await getGroqClient().chat.completions.create({
+        model: "llama-3.3-70b-versatile",
+        messages: [{ role: "user", content: prompt }],
+        response_format: { type: "json_object" },
+        max_tokens: 600,
+      });
+      raw = completion.choices[0]?.message?.content ?? null;
       if (raw) break;
     }
 
