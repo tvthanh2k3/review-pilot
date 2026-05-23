@@ -24,13 +24,13 @@ Key architectural choices and their trade-offs.
 
 ---
 
-## Gemini API (over OpenAI)
+## Groq API (over Gemini / OpenAI)
 
-**Chose:** Google Gemini API (`gemini-2.0-flash`)
+**Chose:** Groq (`llama-3.3-70b-versatile`)
 
-**Reason:** Gemini offers a free tier (1,500 requests/day) with no billing required — practical for an MVP and demo. PRD explicitly lists Gemini as an accepted option.
+**Reason:** Gemini's free tier requires billing pre-payment in Vietnam (quota = 0 without it). OpenAI has no free tier. Groq provides 14,400 free requests/day with no billing required, and supports `response_format: { type: "json_object" }` natively — making structured AI output reliable without extra prompt engineering.
 
-**Trade-off:** OpenAI's `response_format: json_object` is more stable for structured JSON output. Gemini requires prompt-level JSON instructions and response parsing. Mitigated with Zod validation.
+**Trade-off:** Groq is an inference provider, not a model owner — model availability depends on Groq's partnerships. Mitigated by using a stable, widely-supported model (`llama-3.3-70b-versatile`).
 
 ---
 
