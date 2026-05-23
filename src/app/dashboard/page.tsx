@@ -1,9 +1,22 @@
 import { getReviews } from "@/features/reviews/queries/getReviews";
 import { ReviewCard } from "@/features/reviews/components/ReviewCard";
 import { FetchReviewsForm } from "@/features/reviews/components/FetchReviewsForm";
+import { StatusFilter } from "@/features/reviews/components/StatusFilter";
+import type { ReviewStatus } from "@/types";
 
-export default async function DashboardPage() {
-  const reviews = await getReviews();
+type PageProps = {
+  searchParams: Promise<{ status?: string }>;
+};
+
+function parseStatus(raw: string | undefined): ReviewStatus | undefined {
+  if (raw === "pending" || raw === "resolved") return raw;
+  return undefined;
+}
+
+export default async function DashboardPage({ searchParams }: PageProps) {
+  const { status: rawStatus } = await searchParams;
+  const status = parseStatus(rawStatus);
+  const reviews = await getReviews(status);
 
   return (
     <div className="min-h-screen bg-background">
@@ -22,9 +35,15 @@ export default async function DashboardPage() {
       </header>
 
       <main className="max-w-5xl mx-auto px-6 py-8">
+        <div className="mb-6">
+          <StatusFilter active={status} />
+        </div>
+
         {reviews.length === 0 ? (
           <p className="text-center text-sm text-muted-foreground py-16">
-            No reviews yet. Enter a Google Place ID above to fetch reviews.
+            {status
+              ? `No ${status} reviews.`
+              : "No reviews yet. Enter a Google Place ID above to fetch reviews."}
           </p>
         ) : (
           <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
