@@ -14,13 +14,13 @@ You are a **senior software engineer** on this project. Apply production-level t
 
 Businesses struggle to respond consistently to customer reviews at scale. **ReviewPilot** solves this with a web app that fetches Google reviews, surfaces them in a dashboard, and uses AI to generate contextual reply drafts — so managers can review, edit, and post in seconds.
 
-Single Next.js 16 app (App Router) backed by Supabase and wired to the Google Places API and Gemini.
+Single Next.js 16 app (App Router) backed by Supabase and wired to the Google Places API and Groq.
 
 | Layer | Technologies |
 |---|---|
 | Frontend | Next.js 16, React 19, TypeScript, Tailwind CSS 4 |
-| Backend | Next.js Route Handlers, Supabase (PostgreSQL + Auth), Gemini SDK |
-| Integrations | Google Places API (review fetch), Gemini (reply generation) |
+| Backend | Next.js Route Handlers, Supabase (PostgreSQL + Auth), Groq SDK |
+| Integrations | Google Places API (review fetch), Groq (reply generation) |
 
 ---
 
@@ -28,7 +28,7 @@ Single Next.js 16 app (App Router) backed by Supabase and wired to the Google Pl
 
 - Fetch and display Google reviews for a given Place ID
 - Review dashboard — list reviews with rating, date, and author
-- AI reply generation — context-aware draft reply via Gemini
+- AI reply generation — context-aware draft reply via Groq
 - Tone selection (professional, friendly, apologetic) for generated replies
 - Supabase Auth — user login / register
 - Save and manage reply drafts per review
@@ -52,7 +52,7 @@ NEXT_PUBLIC_SUPABASE_URL=
 NEXT_PUBLIC_SUPABASE_ANON_KEY=
 SUPABASE_SERVICE_ROLE_KEY=
 GOOGLE_PLACES_API_KEY=
-GEMINI_API_KEY=
+GROQ_API_KEY=
 ```
 
 ---
@@ -73,7 +73,7 @@ src/
 ├── features/            # Feature modules (see below)
 ├── lib/                 # Shared clients and utilities
 │   ├── supabase/        # Supabase client (server + browser)
-│   ├── gemini.ts        # Gemini client
+│   ├── groq.ts          # Groq client
 │   ├── google-places.ts # Google Places client
 │   └── cn.ts            # clsx + tailwind-merge helper
 ├── middleware.ts         # Supabase Auth session management
@@ -94,10 +94,10 @@ Every feature under `src/features/` follows the same sub-structure — do not de
 ### Key patterns
 
 **Server-only API calls — never bypass this**
-`GOOGLE_PLACES_API_KEY` and `GEMINI_API_KEY` are secret server-side keys. Google Places fetches and Gemini calls must only happen inside Route Handlers or Server Components — never in Client Components, and never prefixed with `NEXT_PUBLIC_`.
+`GOOGLE_PLACES_API_KEY` and `GROQ_API_KEY` are secret server-side keys. Google Places fetches and Groq calls must only happen inside Route Handlers or Server Components — never in Client Components, and never prefixed with `NEXT_PUBLIC_`.
 
 **Route Handlers**
-API routes live in `src/app/api/`. Use Route Handlers (`route.ts`) for Google Places fetches and Gemini calls. Prefer Server Actions for Supabase mutations triggered from forms.
+API routes live in `src/app/api/`. Use Route Handlers (`route.ts`) for Google Places fetches and Groq calls. Prefer Server Actions for Supabase mutations triggered from forms.
 
 **Supabase client usage**
 - Browser components: `createBrowserClient` from `@supabase/ssr`
