@@ -45,7 +45,9 @@ export function ReviewCard({ review }: ReviewCardProps) {
         </p>
         <div className="flex items-center justify-between">
           <span className="text-xs text-muted-foreground">{date}</span>
-          <GenerateButton reviewId={review.id} />
+          {review.status === "pending" && (
+            <GenerateButton reviewId={review.id} />
+          )}
         </div>
       </CardContent>
     </Card>
