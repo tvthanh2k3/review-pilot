@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Dialog,
   DialogContent,
@@ -8,7 +8,9 @@ import {
   DialogTitle,
   DialogDescription,
 } from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/cn";
+import { approveReply } from "@/features/reviews/queries/approveReply";
 import type { AIResponse, Tone } from "@/types";
 
 const TONE_LABELS: Record<Tone, string> = {
@@ -21,14 +23,39 @@ interface AIRepliesDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   replies: AIResponse[];
+  reviewId: string;
 }
 
 export function AIRepliesDialog({
   open,
   onOpenChange,
   replies,
+  reviewId,
 }: AIRepliesDialogProps) {
   const [selectedId, setSelectedId] = useState<string | null>(null);
+  const [approving, setApproving] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!open) {
+      setSelectedId(null);
+      setError(null);
+    }
+  }, [open]);
+
+  async function handleApprove() {
+    if (!selectedId) return;
+    setApproving(true);
+    setError(null);
+    try {
+      await approveReply(selectedId, reviewId);
+      onOpenChange(false);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Failed to approve reply");
+    } finally {
+      setApproving(false);
+    }
+  }
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -59,6 +86,17 @@ export function AIRepliesDialog({
               <p className="leading-relaxed">{reply.content}</p>
             </button>
           ))}
+        </div>
+
+        {error && <p className="text-sm text-destructive">{error}</p>}
+
+        <div className="flex justify-end">
+          <Button
+            disabled={!selectedId || approving}
+            onClick={handleApprove}
+          >
+            {approving ? "Approving…" : "Approve"}
+          </Button>
         </div>
       </DialogContent>
     </Dialog>

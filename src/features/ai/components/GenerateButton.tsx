@@ -29,6 +29,7 @@ export function GenerateButton({ reviewId }: GenerateButtonProps) {
         open={dialogOpen}
         onOpenChange={setDialogOpen}
         replies={replies}
+        reviewId={reviewId}
       />
     </>
   );
