@@ -1,13 +1,17 @@
 import { createClient } from "@/lib/supabase/server";
-import type { Review } from "@/types";
+import type { Review, ReviewStatus } from "@/types";
 
-export async function getReviews(): Promise<Review[]> {
+export async function getReviews(status?: ReviewStatus): Promise<Review[]> {
   const supabase = await createClient();
 
-  const { data, error } = await supabase
+  const query = supabase
     .from("reviews")
     .select("*")
     .order("review_time", { ascending: false });
+
+  const { data, error } = status
+    ? await query.eq("status", status)
+    : await query;
 
   if (error) throw new Error(error.message);
 
