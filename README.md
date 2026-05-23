@@ -1,36 +1,65 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# ReviewPilot
 
-## Getting Started
+Fetch Google reviews by Place ID → generate AI reply drafts (3 tones) → approve in one click.
 
-First, run the development server:
+**Live demo:** [review-pilot.vercel.app](https://review-pilot.vercel.app)
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+---
+
+## Stack
+
+| | |
+|---|---|
+| Framework | Next.js 16 (App Router) + TypeScript |
+| Database | Supabase (PostgreSQL) |
+| AI | OpenAI GPT-4o-mini |
+| UI | Tailwind CSS 4 + shadcn/ui |
+| Validation | Zod |
+
+## Architecture
+
+```mermaid
+flowchart LR
+    UI[Dashboard] -->|POST /api/reviews/fetch| API[Route Handlers]
+    UI -->|POST /api/ai/generate| API
+    UI -->|Server Action| API
+    API --> Google[Google Places API]
+    API --> OpenAI[OpenAI API]
+    API --> DB[(Supabase)]
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+All external API calls run server-side — no API keys exposed to the browser.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+---
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Local Setup
 
-## Learn More
+```bash
+git clone https://github.com/tvthanh2k3/review-pilot.git
+cd review-pilot
+npm install
+cp .env.example .env.local   # fill in your keys
+```
 
-To learn more about Next.js, take a look at the following resources:
+Run `supabase/migrations/001_init.sql` in your Supabase SQL Editor, then optionally `supabase/seed.sql` for sample data.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+npm run dev   # → http://localhost:3000/dashboard
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+---
 
-## Deploy on Vercel
+## Environment Variables
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+See `.env.example` for the full list. Required:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- `NEXT_PUBLIC_SUPABASE_URL` / `NEXT_PUBLIC_SUPABASE_ANON_KEY` — Supabase project API
+- `SUPABASE_SERVICE_ROLE_KEY` — server-only
+- `OPENAI_API_KEY` — server-only
+- `GOOGLE_PLACES_API_KEY` — requires **Places API (New)** enabled in Google Cloud Console
+
+---
+
+## Trade-offs & Decisions
+
+See [DECISIONS.md](./DECISIONS.md).
