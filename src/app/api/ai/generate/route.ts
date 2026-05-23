@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getOpenAIClient } from "@/lib/openai";
+import { getGeminiClient } from "@/lib/gemini";
 import { createClient } from "@/lib/supabase/server";
 import { aiRepliesSchema, buildPrompt } from "@/features/ai/queries/aiSchema";
 import type { Tone } from "@/types";
@@ -29,16 +29,14 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     const prompt = buildPrompt(review.review_text, review.author_name, review.rating);
 
     let raw: string | null = null;
-    const openaiClient = getOpenAIClient();
+    const model = getGeminiClient().getGenerativeModel({
+      model: "gemini-2.0-flash",
+      generationConfig: { responseMimeType: "application/json", maxOutputTokens: 600 },
+    });
 
     for (let attempt = 0; attempt < 2; attempt++) {
-      const completion = await openaiClient.chat.completions.create({
-        model: "gpt-4o-mini",
-        messages: [{ role: "user", content: prompt }],
-        response_format: { type: "json_object" },
-        max_tokens: 600,
-      });
-      raw = completion.choices[0]?.message?.content ?? null;
+      const result = await model.generateContent(prompt);
+      raw = result.response.text() || null;
       if (raw) break;
     }
 
