@@ -14,9 +14,9 @@ import { approveReply } from "@/features/reviews/queries/approveReply";
 import type { AIResponse, Tone } from "@/types";
 
 const TONE_LABELS: Record<Tone, string> = {
-  standard: "Tiêu chuẩn",
-  friendly: "Thân thiện",
-  apologetic: "Xin lỗi",
+  standard: "Standard",
+  friendly: "Friendly",
+  apologetic: "Apologetic",
 };
 
 interface AIRepliesDialogProps {
@@ -51,7 +51,7 @@ export function AIRepliesDialog({
       await approveReply(selectedId, reviewId);
       onOpenChange(false);
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Không thể duyệt phản hồi");
+      setError(err instanceof Error ? err.message : "Failed to approve reply");
     } finally {
       setApproving(false);
     }
@@ -61,15 +61,15 @@ export function AIRepliesDialog({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-lg">
         <DialogHeader>
-          <DialogTitle>Gợi ý phản hồi AI</DialogTitle>
+          <DialogTitle>AI Reply Suggestions</DialogTitle>
           <DialogDescription>
-            Chọn một trong 3 phản hồi được AI tạo ra.
+            Select one of the 3 AI-generated replies.
           </DialogDescription>
         </DialogHeader>
 
         {replies.length === 0 ? (
           <p className="py-6 text-center text-sm text-muted-foreground">
-            Chưa có phản hồi. Vui lòng thử lại.
+            No replies available. Please try again.
           </p>
         ) : (
           <>
@@ -101,7 +101,7 @@ export function AIRepliesDialog({
                 disabled={!selectedId || approving}
                 onClick={handleApprove}
               >
-                {approving ? "Đang duyệt…" : "Duyệt"}
+                {approving ? "Approving…" : "Approve"}
               </Button>
             </div>
           </>

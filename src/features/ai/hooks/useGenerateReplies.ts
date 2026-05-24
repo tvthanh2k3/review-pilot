@@ -32,13 +32,13 @@ export function useGenerateReplies(): UseGenerateRepliesResult {
       const data: { replies?: AIResponse[]; error?: string } = await res.json();
 
       if (!res.ok) {
-        throw new Error(data.error ?? "Không thể tạo phản hồi");
+        throw new Error(data.error ?? "Failed to generate replies");
       }
 
       setReplies(data.replies ?? []);
       setDialogOpen(true);
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Đã có lỗi xảy ra");
+      setError(err instanceof Error ? err.message : "An error occurred");
     } finally {
       setLoading(false);
     }

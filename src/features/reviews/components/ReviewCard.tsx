@@ -18,7 +18,7 @@ function StarRating({ rating }: { rating: number }) {
 }
 
 export function ReviewCard({ review }: ReviewCardProps) {
-  const date = new Date(review.review_time).toLocaleDateString("vi-VN");
+  const date = new Date(review.review_time).toLocaleDateString("en-GB");
 
   return (
     <Card>
@@ -35,7 +35,7 @@ export function ReviewCard({ review }: ReviewCardProps) {
                 : "bg-amber-100 text-amber-800 hover:bg-amber-100"
             )}
           >
-            {review.status === "resolved" ? "Đã xử lý" : "Chờ xử lý"}
+            {review.status === "resolved" ? "Resolved" : "Pending"}
           </Badge>
         </div>
       </CardHeader>
