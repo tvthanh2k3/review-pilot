@@ -2,7 +2,7 @@
 
 Fetch Google reviews by Place ID → generate AI reply drafts (3 tones) → approve in one click.
 
-**Live demo:** [review-pilot-six.vercel.app](https://review-pilot-six.vercel.app)
+**Live demo:** [review-pilot-six.vercel.app](https://review-pilot-six.vercel.app/dashboard)
 
 ---
 
