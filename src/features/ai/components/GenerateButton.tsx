@@ -20,7 +20,7 @@ export function GenerateButton({ reviewId }: GenerateButtonProps) {
         disabled={loading}
         onClick={() => generate(reviewId)}
       >
-        {loading ? "Đang tạo…" : "Tạo phản hồi AI"}
+        {loading ? "Generating…" : "Generate AI"}
       </Button>
 
       {error && <p className="text-xs text-destructive">{error}</p>}
