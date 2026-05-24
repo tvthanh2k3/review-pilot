@@ -8,7 +8,7 @@ Key architectural choices and their trade-offs.
 
 **Chose:** Next.js 16 with App Router
 
-**Reason:** Server Components allow fetching data from Supabase directly without writing extra API routes. Route Handlers handle secret API calls (Google Places, Gemini) server-side. Single codebase for frontend + backend — no separate Express server needed.
+**Reason:** Server Components allow fetching data from Supabase directly without writing extra API routes. Route Handlers handle secret API calls (Google Places, Groq) server-side. Single codebase for frontend + backend — no separate Express server needed.
 
 **Trade-off:** App Router has a steeper learning curve than Pages Router, and some ecosystem libraries lag behind in compatibility.
 
