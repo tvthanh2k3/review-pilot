@@ -3,9 +3,9 @@ import { cn } from "@/lib/cn";
 import type { ReviewStatus } from "@/types";
 
 const OPTIONS: { label: string; value: ReviewStatus | "all" }[] = [
-  { label: "All", value: "all" },
-  { label: "Pending", value: "pending" },
-  { label: "Resolved", value: "resolved" },
+  { label: "Tất cả", value: "all" },
+  { label: "Chờ xử lý", value: "pending" },
+  { label: "Đã xử lý", value: "resolved" },
 ];
 
 interface StatusFilterProps {

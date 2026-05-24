@@ -28,22 +28,22 @@ export function FetchReviewsForm() {
       const data: { inserted?: number; error?: string } = await res.json();
 
       if (!res.ok) {
-        throw new Error(data.error ?? "Failed to fetch reviews");
+        throw new Error(data.error ?? "Không thể lấy đánh giá");
       }
 
       const count = data.inserted ?? 0;
       setMessage({
         type: "success",
         text: count > 0
-          ? `${count} new review${count !== 1 ? "s" : ""} added.`
-          : "No new reviews found (all already saved).",
+          ? `Đã thêm ${count} đánh giá mới.`
+          : "Không có đánh giá mới (tất cả đã được lưu).",
       });
       setPlaceId("");
       router.refresh();
     } catch (err) {
       setMessage({
         type: "error",
-        text: err instanceof Error ? err.message : "Something went wrong",
+        text: err instanceof Error ? err.message : "Đã có lỗi xảy ra",
       });
     } finally {
       setLoading(false);
@@ -56,12 +56,12 @@ export function FetchReviewsForm() {
         type="text"
         value={placeId}
         onChange={(e) => setPlaceId(e.target.value)}
-        placeholder="Enter Google Place ID…"
+        placeholder="Nhập Google Place ID…"
         disabled={loading}
         className="flex-1 rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
       />
       <Button type="submit" disabled={loading || !placeId.trim()} size="sm">
-        {loading ? "Fetching…" : "Fetch Reviews"}
+        {loading ? "Đang tải…" : "Lấy đánh giá"}
       </Button>
       {message && (
         <p

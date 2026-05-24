@@ -35,7 +35,7 @@ export function ReviewCard({ review }: ReviewCardProps) {
                 : "bg-amber-100 text-amber-800 hover:bg-amber-100"
             )}
           >
-            {review.status === "resolved" ? "Resolved" : "Pending"}
+            {review.status === "resolved" ? "Đã xử lý" : "Chờ xử lý"}
           </Badge>
         </div>
       </CardHeader>
@@ -48,6 +48,7 @@ export function ReviewCard({ review }: ReviewCardProps) {
           {review.status === "pending" && (
             <GenerateButton reviewId={review.id} />
           )}
+
         </div>
       </CardContent>
     </Card>
