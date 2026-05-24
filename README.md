@@ -19,16 +19,44 @@ Fetch Google reviews by Place ID → generate AI reply drafts (3 tones) → appr
 ## Architecture
 
 ```mermaid
-flowchart LR
-    UI[Dashboard] -->|POST /api/reviews/fetch| API[Route Handlers]
-    UI -->|POST /api/ai/generate| API
-    UI -->|Server Action| API
-    API --> Google[Google Places API]
-    API --> Groq[Groq API]
-    API --> DB[(Supabase)]
+flowchart TD
+    User([User])
+
+    subgraph Frontend
+        UI[Dashboard]
+    end
+
+    subgraph Backend ["Next.js Route Handlers (server-side)"]
+        FetchRoute[POST /api/reviews/fetch]
+        GenerateRoute[POST /api/ai/generate]
+        ApproveAction[Server Action: approveReply]
+    end
+
+    subgraph External
+        Google[Google Places API]
+        Groq[Groq API]
+    end
+
+    DB[(Supabase\nPostgreSQL)]
+
+    User -->|1. Enter Place ID → Fetch| UI
+    UI --> FetchRoute
+    FetchRoute -->|fetch reviews| Google
+    FetchRoute -->|upsert reviews| DB
+
+    User -->|2. Click Generate AI| UI
+    UI --> GenerateRoute
+    GenerateRoute -->|prompt with 3 tones| Groq
+    GenerateRoute -->|save ai_responses| DB
+
+    User -->|3. Select reply → Approve| UI
+    UI --> ApproveAction
+    ApproveAction -->|is_approved=true\nstatus=resolved| DB
+
+    DB -->|revalidate + render| UI
 ```
 
-All external API calls run server-side — no API keys exposed to the browser.
+All external API calls (Google Places, Groq) run server-side — no API keys are ever exposed to the browser.
 
 ---
 
