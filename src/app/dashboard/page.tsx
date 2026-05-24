@@ -26,7 +26,7 @@ export default async function DashboardPage({ searchParams }: PageProps) {
             <div>
               <h1 className="text-xl font-semibold">ReviewPilot</h1>
               <p className="text-sm text-muted-foreground">
-                {reviews.length} review{reviews.length !== 1 ? "s" : ""}
+                {reviews.length} đánh giá
               </p>
             </div>
             <FetchReviewsForm />
@@ -42,8 +42,8 @@ export default async function DashboardPage({ searchParams }: PageProps) {
         {reviews.length === 0 ? (
           <p className="text-center text-sm text-muted-foreground py-16">
             {status
-              ? `No ${status} reviews.`
-              : "No reviews yet. Enter a Google Place ID above to fetch reviews."}
+              ? `Không có đánh giá ${status === "pending" ? "chờ xử lý" : "đã xử lý"}.`
+              : "Chưa có đánh giá. Nhập Google Place ID ở trên để lấy đánh giá."}
           </p>
         ) : (
           <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
