@@ -84,7 +84,7 @@ See `.env.example` for the full list. Required:
 - `NEXT_PUBLIC_SUPABASE_URL` / `NEXT_PUBLIC_SUPABASE_ANON_KEY` — Supabase project API
 - `SUPABASE_SERVICE_ROLE_KEY` — server-only
 - `GROQ_API_KEY` — server-only
-- `GOOGLE_PLACES_API_KEY` — requires **Places API (New)** enabled in Google Cloud Console
+- `GOOGLE_PLACES_API_KEY` — requires **Places API (New)** enabled in Google Cloud Console. The live demo uses seeded sample data (`supabase/seed.sql`) since billing was not activated; the integration is fully implemented in `src/lib/google-places.ts`.
 
 ---
 
